@@ -1,5 +1,5 @@
 import MoviePlayer from '../../components/movie-player/movie-player';
-import PromoFilmCard from '../../components/promo-film-card/promo-film-card';
+import FilmCard from '../../components/film-card/film-card';
 import PageContent from '../../components/page-content/page-content';
 
 
@@ -20,7 +20,7 @@ function MainPage({ filmsCount, filmPromoInfo }: MainProps): JSX.Element {
     <>
       <MoviePlayer />
 
-      <PromoFilmCard filmPromoInfo={filmPromoInfo} />
+      <FilmCard filmPromoInfo={filmPromoInfo} />
 
       <PageContent filmsCount={filmsCount} />
     </>

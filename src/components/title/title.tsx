@@ -1,12 +1,14 @@
 type titleProps = {
   className: string;
   children: string;
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 };
 
 
-function Title({ className, children }: titleProps): JSX.Element {
+function Title({ className, children, tag = 'h1' }: titleProps): JSX.Element {
+  const Heading = tag;
   return (
-    <h2 className={className}>{children}</h2>
+    <Heading className={className}>{children}</Heading>
   );
 }
 

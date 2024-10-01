@@ -1,6 +1,20 @@
 import Header from '../header/header';
+import Title from '../title/title';
 
-function FullFilmCard(): JSX.Element {
+type FilmPromoInfo = {
+  titlePromo: string;
+  genrePromo: string;
+  yearPromo: string;
+}
+
+
+type FullFilmCardProps = {
+  filmPromoInfo: FilmPromoInfo;
+}
+
+function FullFilmCard({ filmPromoInfo }: FullFilmCardProps):
+  JSX.Element {
+  const { titlePromo, genrePromo, yearPromo } = filmPromoInfo;
   return (
     <section className="film-card film-card--full">
       <div className="film-card__hero">
@@ -8,16 +22,16 @@ function FullFilmCard(): JSX.Element {
           <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
         </div>
 
-        <h1 className="visually-hidden">WTW</h1>
+        <Title className='visually-hidden'>WTW</Title>
 
         <Header />
 
         <div className="film-card__wrap">
           <div className="film-card__desc">
-            <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+            <h2 className="film-card__title">{titlePromo}</h2>
             <p className="film-card__meta">
-              <span className="film-card__genre">Drama</span>
-              <span className="film-card__year">2014</span>
+              <span className="film-card__genre">{genrePromo}</span>
+              <span className="film-card__year">{yearPromo}</span>
             </p>
 
             <div className="film-card__buttons">

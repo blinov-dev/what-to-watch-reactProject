@@ -12,7 +12,7 @@ type ContentProps = {
 function Catalog({ filmsCount }: ContentProps): JSX.Element {
   return (
     <section className="catalog">
-      <Title className={'catalog__title visually-hidden'}>Catalog</Title>
+      <Title tag='h2' className={'catalog__title visually-hidden'}>Catalog</Title>
 
       <GenreList />
 
