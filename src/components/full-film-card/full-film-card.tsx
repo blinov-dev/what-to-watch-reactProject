@@ -1,5 +1,9 @@
+import FilmCardBg from '../film-card-bg/film-card-bg';
 import Header from '../header/header';
 import Title from '../title/title';
+import FilmCardDesc from '../film-card-desc/film-card-desc';
+import FullFilmCardNav from '../full-film-card-nav/full-film-card-nav';
+import FullFilmCardText from '../full-film-card-text/full-film-card-text';
 
 type FilmPromoInfo = {
   titlePromo: string;
@@ -14,42 +18,17 @@ type FullFilmCardProps = {
 
 function FullFilmCard({ filmPromoInfo }: FullFilmCardProps):
   JSX.Element {
-  const { titlePromo, genrePromo, yearPromo } = filmPromoInfo;
   return (
     <section className="film-card film-card--full">
       <div className="film-card__hero">
-        <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
-        </div>
+        <FilmCardBg />
 
         <Title className='visually-hidden'>WTW</Title>
 
         <Header />
 
         <div className="film-card__wrap">
-          <div className="film-card__desc">
-            <h2 className="film-card__title">{titlePromo}</h2>
-            <p className="film-card__meta">
-              <span className="film-card__genre">{genrePromo}</span>
-              <span className="film-card__year">{yearPromo}</span>
-            </p>
-
-            <div className="film-card__buttons">
-              <button className="btn btn--play film-card__button" type="button">
-                <svg viewBox="0 0 19 19" width="19" height="19">
-                  <use xlinkHref="#play-s"></use>
-                </svg>
-                <span>Play</span>
-              </button>
-              <button className="btn btn--list film-card__button" type="button">
-                <svg viewBox="0 0 19 20" width="19" height="20">
-                  <use xlinkHref="#add"></use>
-                </svg>
-                <span>My list</span>
-              </button>
-              <a href="add-review.html" className="btn film-card__button">Add review</a>
-            </div>
-          </div>
+          <FilmCardDesc filmPromoInfo={filmPromoInfo} addReviewButton />
         </div>
       </div>
 
@@ -60,60 +39,9 @@ function FullFilmCard({ filmPromoInfo }: FullFilmCardProps):
           </div>
 
           <div className="film-card__desc">
-            <nav className="film-nav film-card__nav">
-              <ul className="film-nav__list">
-                <li className="film-nav__item">
-                  <a href="/" className="film-nav__link">Overview</a>
-                </li>
-                <li className="film-nav__item film-nav__item--active">
-                  <a href="/" className="film-nav__link">Details</a>
-                </li>
-                <li className="film-nav__item">
-                  <a href="/" className="film-nav__link">Reviews</a>
-                </li>
-              </ul>
-            </nav>
+            <FullFilmCardNav isActiveTab="two" />
 
-            <div className="film-card__text film-card__row">
-              <div className="film-card__text-col">
-                <p className="film-card__details-item">
-                  <strong className="film-card__details-name">Director</strong>
-                  <span className="film-card__details-value">Wes Anderson</span>
-                </p>
-                <p className="film-card__details-item">
-                  <strong className="film-card__details-name">Starring</strong>
-                  <span className="film-card__details-value">
-                    Bill Murray, <br />
-                    Edward Norton, <br />
-                    Jude Law, <br />
-                    Willem Dafoe, <br />
-                    Saoirse Ronan, <br />
-                    Tony Revoloru, <br />
-                    Tilda Swinton, <br />
-                    Tom Wilkinson, <br />
-                    Owen Wilkinson, <br />
-                    Adrien br/ody, <br />
-                    Ralph Fiennes, <br />
-                    Jeff Goldblum
-                  </span>
-                </p>
-              </div>
-
-              <div className="film-card__text-col">
-                <p className="film-card__details-item">
-                  <strong className="film-card__details-name">Run Time</strong>
-                  <span className="film-card__details-value">1h 39m</span>
-                </p>
-                <p className="film-card__details-item">
-                  <strong className="film-card__details-name">Genre</strong>
-                  <span className="film-card__details-value">Comedy</span>
-                </p>
-                <p className="film-card__details-item">
-                  <strong className="film-card__details-name">Released</strong>
-                  <span className="film-card__details-value">2014</span>
-                </p>
-              </div>
-            </div>
+            <FullFilmCardText />
           </div>
         </div>
       </div>
