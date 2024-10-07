@@ -1,15 +1,16 @@
 import Catalog from '../catalog/catalog';
 import Footer from '../../components/footer/footer';
 
+import { Film } from '../../types/film';
 type PageContentProps = {
-  filmsCount: number;
+  films: Array<Film>;
 }
 
 
-function PageContent({ filmsCount }: PageContentProps): JSX.Element {
+function PageContent({ films }: PageContentProps): JSX.Element {
   return (
     <div className="page-content">
-      <Catalog filmsCount={filmsCount} />
+      <Catalog films={films} />
 
       <Footer />
     </div >

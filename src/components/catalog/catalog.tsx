@@ -4,19 +4,20 @@ import CatalogFilmList from '../catalog-film-list/catalog-film-list';
 import CatalogMoreButton from '../catalog-more-button/catalog-more-button';
 
 
-type ContentProps = {
-  filmsCount: number;
+import { Film } from '../../types/film';
+type CatalogProps = {
+  films: Array<Film>;
 }
 
 
-function Catalog({ filmsCount }: ContentProps): JSX.Element {
+function Catalog({ films }: CatalogProps): JSX.Element {
   return (
     <section className="catalog">
       <Title tag='h2' className={'catalog__title visually-hidden'}>Catalog</Title>
 
       <GenreList />
 
-      <CatalogFilmList filmsCount={filmsCount} />
+      <CatalogFilmList films={films} />
 
       <CatalogMoreButton>Show more</CatalogMoreButton>
     </section>

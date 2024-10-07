@@ -1,14 +1,17 @@
 import SmallFilmCard from '../../components/small-film-card/small-film-card';
 
+import { Film } from '../../types/film';
 type CatalogFilmListProps = {
-  filmsCount: number;
+  films: Array<Film>;
 }
 
 
-function CatalogFilmList({ filmsCount }: CatalogFilmListProps): JSX.Element {
+function CatalogFilmList({ films }: CatalogFilmListProps): JSX.Element {
   return (
     <div className="catalog__films-list">
-      {Array.from({ length: filmsCount }, (_, index) => <SmallFilmCard key={index} />)}
+      {films.map((film) => (
+        <SmallFilmCard key={film.id} film={film} />
+      ))}
     </div>
   );
 }

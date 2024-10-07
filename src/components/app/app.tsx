@@ -12,24 +12,18 @@ import MyListPage from '../../pages/my-list-page/my-list-page';
 import PlayerPage from '../../pages/player-page/player-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 
-
-type FilmPromoInfo = {
-  titlePromo: string;
-  genrePromo: string;
-  yearPromo: string;
-}
-
+import { Film } from '../../types/film';
 type AppProps = {
-  filmsCount: number;
-  filmPromoInfo: FilmPromoInfo;
+  films: Array<Film>;
 }
 
-function App({ filmsCount, filmPromoInfo }: AppProps): JSX.Element {
+
+function App({ films }: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<MainPage filmsCount={filmsCount} filmPromoInfo={filmPromoInfo} />} />
+        <Route path="/" element={<MainPage films={films} />} />
         <Route path="/login" element={<SignInPage />} />
         <Route
           path={AppRoute.MyList}
@@ -41,7 +35,7 @@ function App({ filmsCount, filmPromoInfo }: AppProps): JSX.Element {
             </PrivateRoute>
           }
         />
-        <Route path="/films/:id" element={<MoviePage filmsCount={filmsCount} filmPromoInfo={filmPromoInfo} />} />
+        <Route path="/films/:id" element={<MoviePage films={films} />} />
         <Route path="/add-review/:id/review" element={<AddReviewPage />} />
         <Route path="/player/:id" element={<PlayerPage />} />
         <Route path="*" element={<NotFoundPage />} />

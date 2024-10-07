@@ -1,19 +1,13 @@
 import MoviePlayer from '../../components/movie-player/movie-player';
 import PageContent from '../../components/page-content/page-content';
 
-type FilmPromoInfo = {
-  titlePromo: string;
-  genrePromo: string;
-  yearPromo: string;
-}
-
-type MoviePageInListProps = {
-  filmsCount: number;
-  filmPromoInfo: FilmPromoInfo;
+import { Film } from '../../types/film';
+type MoviePageProps = {
+  films: Array<Film>;
 }
 
 
-function MoviePage({ filmsCount, filmPromoInfo }: MoviePageInListProps) {
+function MoviePage({ films }: MoviePageProps) {
   return (
     <>
       <MoviePlayer />
@@ -115,7 +109,7 @@ function MoviePage({ filmsCount, filmPromoInfo }: MoviePageInListProps) {
           </div>
         </div>
       </section>
-      <PageContent filmsCount={filmsCount} />
+      <PageContent films={films} />
     </>
   );
 }

@@ -6,5 +6,11 @@ module.exports = {
         singleQuote: true,
       },
     },
+    {
+      files: "*.ts",
+      options: {
+        singleQuote: true,
+      },
+    },
   ],
 };
