@@ -1,5 +1,5 @@
 export type Film = {
-  id: number;
+  id: number | string;
   name: string;
   posterImage: string;
   previewImage: string;
@@ -12,7 +12,7 @@ export type Film = {
   scoresCount: number;
   director: string;
   starring: [string];
-  runTime: string;
+  runTime: number;
   genre: string;
   released: number;
   isFavorite: boolean;
