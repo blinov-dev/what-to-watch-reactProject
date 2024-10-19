@@ -7,21 +7,33 @@ import CatalogMoreButton from '../catalog-more-button/catalog-more-button';
 import { Film } from '../../types/film';
 type CatalogProps = {
   films: Array<Film>;
+  catalogType: string;
 }
 
 
-function Catalog({ films }: CatalogProps): JSX.Element {
-  return (
-    <section className="catalog">
-      <Title tag='h2' className={'catalog__title visually-hidden'}>Catalog</Title>
+function Catalog({ films, catalogType }: CatalogProps): JSX.Element {
+  if (catalogType === 'moviePage') {
+    return (
+      <section className="catalog  catalog--like-this">
+        <Title tag='h2' className={'catalog__title'}>More like this</Title>
 
-      <GenreList />
+        <CatalogFilmList films={films} />
+      </section>
+    );
+  }
+  else {
+    return (
+      <section className="catalog">
+        <Title tag='h2' className={'catalog__title visually-hidden'}>Catalog</Title>
 
-      <CatalogFilmList films={films} />
+        <GenreList />
 
-      <CatalogMoreButton>Show more</CatalogMoreButton>
-    </section>
-  );
+        <CatalogFilmList films={films} />
+
+        <CatalogMoreButton>Show more</CatalogMoreButton>
+      </section>
+    );
+  }
 }
 
 export default Catalog;

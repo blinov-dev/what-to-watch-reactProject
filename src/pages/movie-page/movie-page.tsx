@@ -1,6 +1,6 @@
 
 import MoviePlayer from '../../components/movie-player/movie-player';
-// import PageContent from '../../components/page-content/page-content';
+import PageContent from '../../components/page-content/page-content';
 import FullFilmCard from '../../components/full-film-card/full-film-card';
 
 import { useParams } from 'react-router-dom';
@@ -20,13 +20,22 @@ function MoviePage({ films, reviews }: MoviePageProps) {
 
   const currentFilm = id ? films.find((film) => film.id === Number(id)) : null;
 
+
+  let selectedCategory: string | undefined;
+  if (currentFilm) {
+    selectedCategory = currentFilm.genre;
+  } else {
+    selectedCategory = undefined;
+  }
+  const filteredFilmsByGenre = selectedCategory ? films.filter((film) => film.genre === selectedCategory) : [];
+
   return (
     <>
       <MoviePlayer />
       {currentFilm && (
         <FullFilmCard key={currentFilm.id} film={currentFilm} reviews={reviews} />
       )}
-      {/* <PageContent films={films} /> */}
+      <PageContent films={filteredFilmsByGenre} catalogType='moviePage' />
     </>
   );
 }

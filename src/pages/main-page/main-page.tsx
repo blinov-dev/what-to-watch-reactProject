@@ -17,7 +17,7 @@ function MainPage({ films, promoFilm }: MainProps): JSX.Element {
 
       <FilmCard promoFilm={promoFilm} />
 
-      <PageContent films={films} />
+      <PageContent films={films} catalogType='mainPage' />
     </>
   );
 }
