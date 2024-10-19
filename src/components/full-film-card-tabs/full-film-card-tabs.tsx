@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { convertMinutesToTimeString, convertRating, convertLevelRating } from '../../utils/utils';
+import UserReview from '../user-review/user-review';
 import { Film } from '../../types/film';
 import { Review } from '../../types/review';
 type FullFilmCardTabsProps = {
@@ -8,18 +9,16 @@ type FullFilmCardTabsProps = {
 }
 
 
-function FullFilmCardTabs(film: FullFilmCardTabsProps, reviews: FullFilmCardTabsProps): JSX.Element {
+function FullFilmCardTabs({ film, reviews }: FullFilmCardTabsProps): JSX.Element {
+
+
   const [activeTab, setActiveTab] = useState('overview');
   const handleTabClick = (tab: string, event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     setActiveTab(tab);
   };
 
-  const { rating, scoresCount, description, director, starring, runTime } = film.film;
-
-  // eslint-disable-next-line no-console
-  console.log(reviews);
-
+  const { rating, scoresCount, description, director, starring, runTime } = film;
 
   return (
     <div className="film-card__desc">
@@ -86,8 +85,14 @@ function FullFilmCardTabs(film: FullFilmCardTabsProps, reviews: FullFilmCardTabs
         </div>
       )}
       {activeTab === 'reviews' && (
-
-        <div>Reviews</div>
+        <div className="film-card__reviews film-card__row">
+          <div className="film-card__reviews-col">
+            {reviews && reviews.slice(0, 3).map((review) => <UserReview key={review.id} review={review} />)}
+          </div>
+          <div className="film-card__reviews-col">
+            {reviews && reviews.slice(3, 6).map((review) => <UserReview key={review.id} review={review} />)}
+          </div>
+        </div>
       )}
     </div >
   );

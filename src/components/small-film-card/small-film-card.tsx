@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Title from '../title/title';
 
@@ -11,22 +11,34 @@ type SmallFilmCardProps = {
 
 function SmallFilmCard({ film }: SmallFilmCardProps): JSX.Element {
   const [isHovered, setIsHovered] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
-    setTimeout(() => {
+    // Устанавливаем таймер при наведении мыши
+    const timeout = setTimeout(() => {
       setIsHovered(true);
     }, 1000);
+    setHoverTimeout(timeout);
   };
   const handleMouseLeave = () => {
+    setHoverTimeout(null); // Сбрасываем таймер }
     setIsHovered(false);
   };
 
+  useEffect(() =>
+    // Очищаем таймер при размонтировании компонента или изменении состояния
+    () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+    }, [hoverTimeout]);
+
   return (
     <article className={'small-film-card catalog__films-card'}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseOver={handleMouseEnter}
+      onMouseOut={handleMouseLeave}
     >
-      {isHovered ? (
+      {isHovered === true ? (
         <Player film={film} bigPlayer={false} />
       ) : (
         <>

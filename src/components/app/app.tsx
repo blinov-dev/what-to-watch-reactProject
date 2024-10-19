@@ -22,6 +22,7 @@ type AppProps = {
 
 
 function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
+
   return (
     <BrowserRouter>
       <ScrollToTop />

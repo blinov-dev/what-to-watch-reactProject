@@ -9,9 +9,6 @@ type PlayerProps = {
 function Player({ film, bigPlayer }: PlayerProps): JSX.Element {
   const { posterImage, videoLink } = film;
 
-  // eslint-disable-next-line no-console
-  console.log(film);
-
   return (
     <div className={bigPlayer ? 'player' : ''}>
       <video className="player__video" poster={posterImage} controls muted autoPlay>

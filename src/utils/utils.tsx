@@ -50,3 +50,18 @@ export function convertLevelRating(ratingValue: number): string {
   }
   return 'Unknown';
 }
+
+
+export function convertStringDate(date: string): string {
+  const dateString: string = date;
+  const parseDate: Date = new Date(dateString);
+  // Массив названий месяцев
+  const months: string[] = [
+    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+  ];
+
+  // Форматируем дату
+  const formattedDate = `${months[parseDate.getMonth()]} ${parseDate.getDate()}, ${parseDate.getFullYear()}`;
+  return formattedDate;
+}
