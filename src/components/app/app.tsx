@@ -27,7 +27,7 @@ function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<MainPage films={films} promoFilm={promoFilm} />} />
+        <Route path="/" element={<MainPage promoFilm={promoFilm} />} />
         <Route path="/login" element={<SignInPage />} />
         <Route
           path={AppRoute.MyList}
@@ -39,7 +39,7 @@ function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
             </PrivateRoute>
           }
         />
-        <Route path="/films/:id" element={<MoviePage films={films} reviews={reviews} />} />
+        <Route path="/films/:id" element={<MoviePage reviews={reviews} />} />
         <Route
           path={AppRoute.Review}
           element={

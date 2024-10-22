@@ -5,19 +5,18 @@ import FilmCard from '../../components/promo-film-card/promo-film-card';
 
 import { Film } from '../../types/film';
 type MainProps = {
-  films: Array<Film>;
   promoFilm: Film;
 }
 
 
-function MainPage({ films, promoFilm }: MainProps): JSX.Element {
+function MainPage({ promoFilm }: MainProps): JSX.Element {
   return (
     <>
       <MoviePlayer />
 
       <FilmCard promoFilm={promoFilm} />
 
-      <PageContent films={films} catalogType='mainPage' />
+      <PageContent catalogType='mainPage' />
     </>
   );
 }
