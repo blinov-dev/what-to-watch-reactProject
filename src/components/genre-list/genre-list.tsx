@@ -10,7 +10,7 @@ function GenreList() {
 
   const handleGenreReset = (event: React.MouseEvent<HTMLAnchorElement>, genre: string) => {
     event.preventDefault();
-    dispatch(loadFilmsListAction(genre));
+    dispatch(loadFilmsListAction());
   };
   const handleGenreChange = (event: React.MouseEvent<HTMLAnchorElement>, genre: string) => {
     event.preventDefault();

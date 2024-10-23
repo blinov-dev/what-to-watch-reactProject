@@ -3,12 +3,22 @@ import GenreList from '../../components/genre-list/genre-list';
 import CatalogFilmList from '../catalog-film-list/catalog-film-list';
 import CatalogMoreButton from '../catalog-more-button/catalog-more-button';
 
+import { useAppDispatch } from '../../hooks';
+import { showMoreFilmsAction } from '../../store/action';
+
 type CatalogProps = {
   catalogType: string;
 }
 
 
 function Catalog({ catalogType }: CatalogProps): JSX.Element {
+
+  const dispatch = useAppDispatch();
+
+  const handleShowMore = () => {
+    dispatch(showMoreFilmsAction(8));// Увеличиваем количество видимых карточек на 8
+  };
+
   if (catalogType === 'moviePage') {
     return (
       <section className="catalog  catalog--like-this">
@@ -27,7 +37,7 @@ function Catalog({ catalogType }: CatalogProps): JSX.Element {
 
         <CatalogFilmList />
 
-        <CatalogMoreButton>Show more</CatalogMoreButton>
+        <CatalogMoreButton onClick={handleShowMore}>Show more</CatalogMoreButton>
       </section>
     );
   }

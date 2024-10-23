@@ -3,29 +3,43 @@ import { useEffect } from 'react';
 import SmallFilmCard from '../../components/small-film-card/small-film-card';
 
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { changeGenreAction } from '../../store/action';
+import { changeGenreAction, setFilteredFilmsAction, loadFilmsListAction } from '../../store/action';
 
 
 function CatalogFilmList(): JSX.Element {
 
   const films = useAppSelector((state) => state.films);
   const activeGenre = useAppSelector((state) => state.genre);
+  const filmsCount = useAppSelector((state) => state.filmsCount);
+  const filteredFilms = useAppSelector((state) => state.filteredFilms);
   const dispatch = useAppDispatch();
 
+
+  useEffect(() => {
+    // Сбрасываем состояние при переходе на страницу
+    dispatch(loadFilmsListAction());
+  }, [dispatch]);
+
+  const displayedFilms = films.slice(0, filmsCount);
+
   const { id } = useParams();
-
   const currentFilm = id ? films.find((film) => film.id === Number(id)) : null;
-
   useEffect(() => {
     if (currentFilm) {
       dispatch(changeGenreAction(currentFilm.genre));
     }
   }, [currentFilm, dispatch]);
-  // Фильтруем фильмы по активному жанру, исключая текущий фильм
-  const filteredFilms = films.filter((film) => {
-    const isSameGenre = activeGenre === 'All genres' || film.genre === activeGenre;
-    return isSameGenre && film.id !== (currentFilm ? currentFilm.id : null);
-  });
+
+  useEffect(() => {
+    const filtered = displayedFilms.filter((film) => {
+      const isSameGenre = activeGenre === 'All genres' || film.genre === activeGenre;
+      return isSameGenre && film.id !== (currentFilm ? currentFilm.id : null);
+    });
+
+    if (filtered.length !== filteredFilms.length || !filtered.every((film, index) => film.id === filteredFilms[index]?.id)) {
+      dispatch(setFilteredFilmsAction(filtered));
+    }
+  }, [activeGenre, displayedFilms, currentFilm, dispatch, filteredFilms]);
 
   return (
     <div className="catalog__films-list">
