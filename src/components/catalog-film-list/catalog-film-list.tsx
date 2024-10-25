@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import SmallFilmCard from '../../components/small-film-card/small-film-card';
 
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { changeGenreAction, setFilteredFilmsAction, loadFilmsListAction } from '../../store/action';
+import { changeGenreAction, setFilteredFilmsAction, loadStartPageAction } from '../../store/action';
 
 
 function CatalogFilmList(): JSX.Element {
@@ -17,7 +17,7 @@ function CatalogFilmList(): JSX.Element {
 
   useEffect(() => {
     // Сбрасываем состояние при переходе на страницу
-    dispatch(loadFilmsListAction());
+    dispatch(loadStartPageAction());
   }, [dispatch]);
 
   const displayedFilms = films.slice(0, filmsCount);
