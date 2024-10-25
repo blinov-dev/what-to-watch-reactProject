@@ -15,13 +15,7 @@ export const initialState = {
 };
 
 export const updateStore = createReducer(initialState, (builder) => {
-  builder.addCase(loadFilmsListAction, () => initialState); // Сбрасываем состояние
-
-  // builder.addCase(loadFilmsListAction, (state) => {
-  //   state.films = FILMS;
-  //   state.genre = 'All genres';
-  //   state.filmsCount = 8;
-  // });
+  builder.addCase(loadFilmsListAction, () => initialState);
   builder.addCase(changeGenreAction, (state, action) => {
     state.genre = action.payload;
     state.filmsCount = 8;

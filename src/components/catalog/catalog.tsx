@@ -16,7 +16,7 @@ function Catalog({ catalogType }: CatalogProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const handleShowMore = () => {
-    dispatch(showMoreFilmsAction(8));// Увеличиваем количество видимых карточек на 8
+    dispatch(showMoreFilmsAction(8));
   };
 
   if (catalogType === 'moviePage') {
