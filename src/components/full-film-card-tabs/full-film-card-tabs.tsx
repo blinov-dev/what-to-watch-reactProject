@@ -1,37 +1,35 @@
 import { useState } from 'react';
 import { convertMinutesToTimeString, convertRating, convertLevelRating } from '../../utils/utils';
 import UserReview from '../user-review/user-review';
-import { Film } from '../../types/film';
-import { Review } from '../../types/review';
-type FullFilmCardTabsProps = {
-  film: Film;
-  reviews: Array<Review>;
-}
+import { useAppSelector } from '../../hooks';
+import Loading from '../loading/loading';
 
-
-function FullFilmCardTabs({ film, reviews }: FullFilmCardTabsProps): JSX.Element {
-
-
+function FullFilmCardTabs(): JSX.Element {
   const [activeTab, setActiveTab] = useState('overview');
   const handleTabClick = (tab: string, event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     setActiveTab(tab);
   };
 
-  const { rating, scoresCount, description, director, starring, runTime } = film;
+  const currentFilmReviews = useAppSelector((state) => state.filmReviews);
+  const currentFilm = useAppSelector((state) => state.currentFilm);
+  if (!currentFilm) {
+    return <Loading />;
+  }
+  const { rating, scoresCount, description, director, starring, runTime } = currentFilm;
 
   return (
     <div className="film-card__desc">
       <nav className="film-nav film-card__nav">
         <ul className="film-nav__list">
           <li className={activeTab === 'overview' ? 'film-nav__item film-nav__item--active' : 'film-nav__item'}>
-            <a href='#' className="film-nav__link" onClick={(event) => handleTabClick('overview', event)}>Overview</a>
+            <a href='/' className="film-nav__link" onClick={(event) => handleTabClick('overview', event)}>Overview</a>
           </li>
           <li className={activeTab === 'details' ? 'film-nav__item film-nav__item--active' : 'film-nav__item'}>
-            <a href='#' className="film-nav__link" onClick={(event) => handleTabClick('details', event)}>Details</a>
+            <a href='/' className="film-nav__link" onClick={(event) => handleTabClick('details', event)}>Details</a>
           </li>
           <li className={activeTab === 'reviews' ? 'film-nav__item film-nav__item--active' : 'film-nav__item'}>
-            <a href='#' className="film-nav__link" onClick={(event) => handleTabClick('reviews', event)}>Reviews</a>
+            <a href='/' className="film-nav__link" onClick={(event) => handleTabClick('reviews', event)}>Reviews</a>
           </li>
         </ul>
       </nav>
@@ -87,10 +85,10 @@ function FullFilmCardTabs({ film, reviews }: FullFilmCardTabsProps): JSX.Element
       {activeTab === 'reviews' && (
         <div className="film-card__reviews film-card__row">
           <div className="film-card__reviews-col">
-            {reviews && reviews.slice(0, 3).map((review) => <UserReview key={review.id} review={review} />)}
+            {currentFilmReviews.length === 0 ? <div>Обзоров еще нет</div> : currentFilmReviews && currentFilmReviews.slice(0, 3).map((review) => <UserReview key={review.id} review={review} />)}
           </div>
           <div className="film-card__reviews-col">
-            {reviews && reviews.slice(3, 6).map((review) => <UserReview key={review.id} review={review} />)}
+            {currentFilmReviews && currentFilmReviews.slice(3, 6).map((review) => <UserReview key={review.id} review={review} />)}
           </div>
         </div>
       )}

@@ -13,16 +13,23 @@ import PlayerPage from '../../pages/player-page/player-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 
 import { Film } from '../../types/film';
-import { Review } from '../../types/review';
+import Loading from '../loading/loading';
+import { useAppSelector } from '../../hooks';
 type AppProps = {
   films: Array<Film>;
   promoFilm: Film;
-  reviews: Array<Review>;
 }
 
 
-function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
+function App({ films, promoFilm, }: AppProps): JSX.Element {
 
+  const films1 = useAppSelector((state) => state.films);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  if (authorizationStatus === AuthorizationStatus.Unknown || films1.length === 0) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -34,18 +41,18 @@ function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
           path={AppRoute.MyList}
           element={
             <PrivateRoute
-              authorizationStatus={AuthorizationStatus.Auth}
+              authorizationStatus={authorizationStatus}
             >
               <MyListPage films={films} />
             </PrivateRoute>
           }
         />
-        <Route path="/films/:id" element={<MoviePage reviews={reviews} />} />
+        <Route path="/films/:id" element={<MoviePage />} />
         <Route
           path={AppRoute.Review}
           element={
             <PrivateRoute
-              authorizationStatus={AuthorizationStatus.Auth}
+              authorizationStatus={authorizationStatus}
             >
               <AddReviewPage films={films} />
             </PrivateRoute>

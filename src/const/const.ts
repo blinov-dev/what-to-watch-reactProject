@@ -2,6 +2,7 @@ export enum AppRoute {
   Login = '/login',
   MyList = '/my-list',
   Review = '/films/:id/review',
+  Main = '/',
 }
 
 export enum AuthorizationStatus {
@@ -15,5 +16,8 @@ export enum APIRoute {
   Films = '/films',
   SimilarFilms = '/films/{filmId}/similar',
   Login = '/login',
-  Logout = '/logout',
+  Logout = '/',
+  Reviews = '/comments/{filmId}',
 }
+
+export const TIMEOUT_SHOW_ERROR = 2000;

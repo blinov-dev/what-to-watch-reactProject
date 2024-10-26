@@ -2,14 +2,28 @@ import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 
-import { APIRoute } from '../const/const';
+import {
+  APIRoute,
+  AppRoute,
+  AuthorizationStatus,
+  TIMEOUT_SHOW_ERROR,
+} from '../const/const';
 import { Film, Films } from '../types/film';
 import {
   loadFilmsAction,
   loadPromoFilmAction,
   loadSimilarFilmsAction,
   Action,
+  resetLoadFilmReviewsAction,
+  requireAuthorizationStatusAction,
+  setErrorAction,
+  redirectToRoute,
 } from './action';
+import { Review } from '../types/review';
+import { AuthData } from '../types/auth-data';
+import { dropToken, saveToken } from '../services/token';
+import { UserData } from '../types/user-data';
+import { store } from '.';
 
 export const fetchFilmsAction = createAsyncThunk<
   void,
@@ -52,50 +66,73 @@ export const fetchSimilarFilmsAction = createAsyncThunk<
   dispatch(loadSimilarFilmsAction(data));
 });
 
-// export const checkAuthAction = createAsyncThunk<
-//   void,
-//   undefined,
-//   {
-//     dispatch: AppDispatch;
-//     state: State;
-//     extra: AxiosInstance;
-//   }
-// >('user/checkAuth', async (_arg, { dispatch, extra: api }) => {
-//   try {
-//     await api.get(APIRoute.Login);
-//     dispatch(requireAuthorization(AuthorizationStatus.Auth));
-//   } catch {
-//     dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-//   }
-// });
-// export const loginAction = createAsyncThunk<
-//   void,
-//   AuthData,
-//   {
-//     dispatch: AppDispatch;
-//     state: State;
-//     extra: AxiosInstance;
-//   }
-// >(
-//   'user/login',
-//   async ({ login: email, password }, { dispatch, extra: api }) => {
-//     const {
-//       data: { token },
-//     } = await api.post<UserData>(APIRoute.Login, { email, password });
-//     saveToken(token);
-//     dispatch(requireAuthorization(AuthorizationStatus.Auth));
-//   }
-// );
-// export const logoutAction = createAsyncThunk<
-//   void,
-//   undefined,
-//   {
-//     dispatch: AppDispatch;
-//     state: State;
-//     extra: AxiosInstance;
-//   }
-// >('user/logout', async (_arg, { dispatch, extra: api }) => {
-//   await api.delete(APIRoute.Logout);
-//   dropToken();
-//   dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-// });
+export const fetchFilmReviewsAction = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(Action.LOAD_SIMILAR_FILMS, async (filmId, { dispatch, extra: api }) => {
+  const { data } = await api.get<Review[]>(
+    APIRoute.SimilarFilms.replace('{filmId}', filmId)
+  );
+  dispatch(resetLoadFilmReviewsAction(data));
+});
+
+export const checkAuthAction = createAsyncThunk<
+  void,
+  undefined,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(
+  Action.REQUIRE_AUTHORIZATION_STATUS,
+  async (_arg, { dispatch, extra: api }) => {
+    try {
+      await api.get(APIRoute.Login);
+      dispatch(requireAuthorizationStatusAction(AuthorizationStatus.Auth));
+    } catch {
+      dispatch(requireAuthorizationStatusAction(AuthorizationStatus.NoAuth));
+    }
+  }
+);
+
+export const loginAction = createAsyncThunk<
+  void,
+  AuthData,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(
+  'user/login',
+  async ({ login: email, password }, { dispatch, extra: api }) => {
+    const {
+      data: { token },
+    } = await api.post<UserData>(APIRoute.Login, { email, password });
+    saveToken(token);
+    dispatch(redirectToRoute(AppRoute.Main));
+  }
+);
+
+export const logoutAction = createAsyncThunk<
+  void,
+  undefined,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('user/logout', async (_arg, { extra: api }) => {
+  await api.delete(APIRoute.Logout);
+  dropToken();
+});
+
+export const clearErrorAction = createAsyncThunk(Action.SET_ERROR, () => {
+  setTimeout(() => store.dispatch(setErrorAction(null)), TIMEOUT_SHOW_ERROR);
+});

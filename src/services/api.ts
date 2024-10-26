@@ -1,9 +1,30 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
 import { getToken } from './token';
+import { processErrorHandle } from './process-error-handle';
+import { StatusCodes } from 'http-status-codes';
 
 const BACKEND_URL = 'https://10.react.htmlacademy.pro/wtw';
 const REQUEST_TIMEOUT = 50000;
 
+type DetailMessageType = {
+  type: string;
+  message: string;
+};
+const StatusCodeMapping: Record<number, boolean> = {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  [StatusCodes.BAD_REQUEST]: true,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  [StatusCodes.UNAUTHORIZED]: true,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  [StatusCodes.NOT_FOUND]: true,
+};
+const shouldDisplayError = (response: AxiosResponse) =>
+  !!StatusCodeMapping[response.status];
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
     baseURL: BACKEND_URL,
@@ -17,5 +38,16 @@ export const createAPI = (): AxiosInstance => {
     }
     return config;
   });
+
+  api.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError<DetailMessageType>) => {
+      if (error.response && shouldDisplayError(error.response)) {
+        const detailMessage = error.response.data;
+        processErrorHandle(detailMessage.message);
+      }
+      throw error;
+    }
+  );
   return api;
 };

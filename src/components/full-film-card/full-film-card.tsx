@@ -3,27 +3,34 @@ import Title from '../../components/title/title';
 import Header from '../header/header';
 import { Link, useNavigate } from 'react-router-dom';
 import FullFilmCardTabs from '../full-film-card-tabs/full-film-card-tabs';
+import { useAppSelector } from '../../hooks';
+import Loading from '../loading/loading';
 
-import { Review } from '../../types/review';
-import { Film } from '../../types/film';
-type FullFilmCardProps = {
-  film: Film;
-  reviews: Array<Review>;
-}
-
-function FullFilmCard({ film, reviews }: FullFilmCardProps): JSX.Element {
-
+function FullFilmCard(): JSX.Element {
   const navigate = useNavigate();
 
+  const currentFilm = useAppSelector((state) => state.currentFilm);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+
+  if (!currentFilm) {
+    return <Loading />;
+  }
+
+  const { name, backgroundImage, posterImage, genre, released } = currentFilm;
+
   function handlePlayerButtonClick() {
-    navigate(`/player/${film.id}`);
+    if (currentFilm) {
+      navigate(`/player/${currentFilm.id}`);
+    } else {
+      navigate('*');
+    }
   }
 
   return (
     <section className="film-card film-card--full">
       <div className="film-card__hero">
         <div className="film-card__bg">
-          <img src={film.backgroundImage} alt={film.name} />
+          <img src={backgroundImage} alt={name} />
         </div>
 
         <Title className="visually-hidden">WTW</Title>
@@ -32,10 +39,10 @@ function FullFilmCard({ film, reviews }: FullFilmCardProps): JSX.Element {
 
         <div className="film-card__wrap">
           <div className="film-card__desc">
-            <Title tag='h2' className="film-card__title">{film.name}</Title>
+            <Title tag='h2' className="film-card__title">{name}</Title>
             <p className="film-card__meta">
-              <span className="film-card__genre">{film.genre}</span>
-              <span className="film-card__year">{film.released}</span>
+              <span className="film-card__genre">{genre}</span>
+              <span className="film-card__year">{released}</span>
             </p>
 
             <div className="film-card__buttons">
@@ -51,7 +58,7 @@ function FullFilmCard({ film, reviews }: FullFilmCardProps): JSX.Element {
                 </svg>
                 <span>My list</span>
               </button>
-              <Link to="review" className="btn film-card__button">Add review</Link>
+              <Link to="review" className={authorizationStatus === 'AUTH' ? 'btn film-card__button' : 'visually-hidden'}>Add review</Link>
             </div>
           </div>
         </div>
@@ -60,10 +67,10 @@ function FullFilmCard({ film, reviews }: FullFilmCardProps): JSX.Element {
       <div className="film-card__wrap film-card__translate-top">
         <div className="film-card__info">
           <div className="film-card__poster film-card__poster--big">
-            <img src={film.posterImage} alt={film.name} width="218" height="327" />
+            <img src={posterImage} alt={name} width="218" height="327" />
           </div>
 
-          <FullFilmCardTabs film={film} reviews={reviews} />
+          <FullFilmCardTabs />
         </div>
       </div>
     </section>

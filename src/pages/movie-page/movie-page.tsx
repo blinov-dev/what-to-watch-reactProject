@@ -1,37 +1,33 @@
-/* eslint-disable no-console */
-
 import MoviePlayer from '../../components/movie-player/movie-player';
 import PageContent from '../../components/page-content/page-content';
 import FullFilmCard from '../../components/full-film-card/full-film-card';
-
-// import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
-import { Review } from '../../types/review';
+
 import { useEffect } from 'react';
 import { changeGenreAction, setCurrentFilmAction } from '../../store/action';
 import { fetchSimilarFilmsAction } from '../../store/api-actions';
-import { useParams } from 'react-router-dom';
-
-type MoviePageProps = {
-  reviews: Array<Review>;
-}
+import { useNavigate, useParams } from 'react-router-dom';
 
 
-function MoviePage({ reviews }: MoviePageProps) {
-  const { id } = useParams<{ id: string }>(); // Получаем id из URL
+function MoviePage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const currentFilm = useAppSelector((state) => state.currentFilm);
   const films = useAppSelector((state) => state.films);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (id) {
+    if (id && films.length > 0) {
       const filmToSet = films.find((film) => film.id === Number(id));
       if (filmToSet) {
-        dispatch(setCurrentFilmAction(filmToSet)); // Устанавливаем текущий фильм
+        dispatch(setCurrentFilmAction(filmToSet));
+      } else {
+        navigate('*');
       }
     }
-  }, [id, dispatch, films]);
+  }, [id, dispatch, films, navigate]);
 
   useEffect(() => {
     if (currentFilm) {
@@ -40,15 +36,11 @@ function MoviePage({ reviews }: MoviePageProps) {
     }
   }, [currentFilm, dispatch]);
 
-  // const { id } = useParams();
-
-  // const currentFilm = id ? films.find((film) => film.id === Number(id)) : null;
-
   return (
     <>
       <MoviePlayer />
       {currentFilm && (
-        <FullFilmCard key={currentFilm.id} film={currentFilm} reviews={reviews} />
+        <FullFilmCard key={currentFilm.id} />
       )}
       <PageContent catalogType='moviePage' />
     </>

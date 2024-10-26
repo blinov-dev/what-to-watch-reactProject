@@ -1,16 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { Films, Film } from '../types/film';
+import { Review } from '../types/review';
 import {
   loadFilmsAction,
   loadAllGenresFilmsAction,
   changeGenreAction,
   showMoreFilmsAction,
   setFilteredFilmsAction,
-  requireAuthorizationAction,
+  requireAuthorizationStatusAction,
   loadPromoFilmAction,
   setCurrentFilmAction,
   loadSimilarFilmsAction,
   resetStateAction,
+  resetLoadFilmReviewsAction,
+  setErrorAction,
 } from './action';
 
 import { AuthorizationStatus } from '../const/const';
@@ -24,6 +27,8 @@ type InitialState = {
   promoFilm: Film | null;
   currentFilm: Film | null;
   similarFilms: Films;
+  filmReviews: Review[];
+  error: string | null;
 };
 
 export const initialState: InitialState = {
@@ -35,6 +40,8 @@ export const initialState: InitialState = {
   promoFilm: null,
   currentFilm: null,
   similarFilms: [],
+  filmReviews: [],
+  error: null,
 };
 
 export const updateStore = createReducer(initialState, (builder) => {
@@ -64,11 +71,17 @@ export const updateStore = createReducer(initialState, (builder) => {
   builder.addCase(setFilteredFilmsAction, (state, action) => {
     state.filteredFilms = action.payload;
   });
-  builder.addCase(requireAuthorizationAction, (state, action) => {
+  builder.addCase(requireAuthorizationStatusAction, (state, action) => {
     state.authorizationStatus = action.payload;
+  });
+  builder.addCase(setErrorAction, (state, action) => {
+    state.error = action.payload;
   });
   builder.addCase(loadSimilarFilmsAction, (state, action) => {
     state.similarFilms = action.payload;
+  });
+  builder.addCase(resetLoadFilmReviewsAction, (state, action) => {
+    state.filmReviews = action.payload;
   });
   builder.addCase(
     resetStateAction,

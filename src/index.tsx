@@ -2,17 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './store';
-
-import { fetchFilmsAction, fetchPromoFilmAction } from './store/api-actions';
+import ErrorMessage from './components/error-message/error-message';
+import { fetchFilmsAction, fetchPromoFilmAction, checkAuthAction } from './store/api-actions';
 
 import App from './components/app/app';
-
 import { FILMS } from './mocks/films';
-import { REVIEWS } from './mocks/reviews';
 import { PROMO_FILM } from './mocks/promo-film';
 
 store.dispatch(fetchFilmsAction());
 store.dispatch(fetchPromoFilmAction());
+store.dispatch(checkAuthAction());
 
 
 const root = ReactDOM.createRoot(
@@ -22,7 +21,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App films={FILMS} promoFilm={PROMO_FILM} reviews={REVIEWS} />
+      <ErrorMessage />
+      <App films={FILMS} promoFilm={PROMO_FILM} />
     </Provider>
   </React.StrictMode>
 );
