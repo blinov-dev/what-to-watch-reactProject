@@ -5,14 +5,21 @@ import { AuthorizationStatus } from '../const/const';
 export const Action = {
   LOAD_FILMS: 'LOAD FILMS',
   LOAD_PROMO_FILM: 'LOAD PROMO FILM',
+  LOAD_SIMILAR_FILMS: 'LOAD SIMILAR FILMS',
   CHANGE_GENRE: 'CHANGE_GENRE',
   LOAD_ALL_GENRES_FILMS: 'LOAD_ALL_GENRES_FILMS',
   SHOW_MORE_FILMS: 'SHOW_MORE_FILMS',
   SET_FILTERED_FILMS: 'SET_FILTERED_FILMS',
   REQUIRE_AUTHORIZATION: 'REQUIRE_AUTHORIZATION',
+  SET_CURRENT_FILM: 'SET_CURRENT_FILM',
+  RESET_STATE: 'RESET_STATE',
 };
 
 export const loadFilmsAction = createAction<Film[]>(Action.LOAD_FILMS);
+export const loadSimilarFilmsAction = createAction<Film[]>(
+  Action.LOAD_SIMILAR_FILMS
+);
+export const setCurrentFilmAction = createAction<Film>(Action.SET_CURRENT_FILM);
 export const loadPromoFilmAction = createAction<Film>(Action.LOAD_PROMO_FILM);
 export const loadAllGenresFilmsAction = createAction(
   Action.LOAD_ALL_GENRES_FILMS
@@ -22,6 +29,7 @@ export const showMoreFilmsAction = createAction<number>(Action.SHOW_MORE_FILMS);
 export const setFilteredFilmsAction = createAction<Film[]>(
   Action.SET_FILTERED_FILMS
 );
-export const requireAuthorization = createAction<AuthorizationStatus>(
+export const requireAuthorizationAction = createAction<AuthorizationStatus>(
   Action.REQUIRE_AUTHORIZATION
 );
+export const resetStateAction = createAction(Action.RESET_STATE);

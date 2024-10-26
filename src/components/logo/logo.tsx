@@ -5,10 +5,11 @@ type LogoProps = {
 }
 
 function Logo({ light }: LogoProps): JSX.Element {
+
   if (light) {
     return (
       <div className="logo">
-        <Link className="logo__link logo__link--light" to="/">
+        <Link className="logo__link logo__link--light" to="/" >
           <span className="logo__letter logo__letter--1">W</span>
           <span className="logo__letter logo__letter--2">T</span>
           <span className="logo__letter logo__letter--3">W</span>
@@ -18,7 +19,7 @@ function Logo({ light }: LogoProps): JSX.Element {
   }
   return (
     <div className="logo" >
-      <Link className="logo__link" to="/">
+      <Link className="logo__link" to="/" >
         <span className="logo__letter logo__letter--1">W</span>
         <span className="logo__letter logo__letter--2">T</span>
         <span className="logo__letter logo__letter--3">W</span>

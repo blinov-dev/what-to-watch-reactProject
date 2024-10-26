@@ -24,7 +24,9 @@ function Catalog({ catalogType }: CatalogProps): JSX.Element {
       <section className="catalog  catalog--like-this">
         <Title tag='h2' className={'catalog__title'}>More like this</Title>
 
-        <CatalogFilmList />
+        <CatalogFilmList catalogType={'moviePage'} />
+
+        <CatalogMoreButton onClick={handleShowMore}>Show more</CatalogMoreButton>
       </section>
     );
   }
@@ -35,7 +37,7 @@ function Catalog({ catalogType }: CatalogProps): JSX.Element {
 
         <GenreList />
 
-        <CatalogFilmList />
+        <CatalogFilmList catalogType={''} />
 
         <CatalogMoreButton onClick={handleShowMore}>Show more</CatalogMoreButton>
       </section>

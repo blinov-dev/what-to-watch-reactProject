@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 
 import { AppRoute, AuthorizationStatus } from '../../const/const';
@@ -22,6 +22,7 @@ type AppProps = {
 
 
 function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
+
 
   return (
     <BrowserRouter>

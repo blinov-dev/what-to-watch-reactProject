@@ -4,7 +4,12 @@ import { AppDispatch, State } from '../types/state';
 
 import { APIRoute } from '../const/const';
 import { Film, Films } from '../types/film';
-import { loadFilmsAction, loadPromoFilmAction, Action } from './action';
+import {
+  loadFilmsAction,
+  loadPromoFilmAction,
+  loadSimilarFilmsAction,
+  Action,
+} from './action';
 
 export const fetchFilmsAction = createAsyncThunk<
   void,
@@ -30,6 +35,21 @@ export const fetchPromoFilmAction = createAsyncThunk<
 >(Action.LOAD_PROMO_FILM, async (_arg, { dispatch, extra: api }) => {
   const { data } = await api.get<Film>(APIRoute.PromoFilm);
   dispatch(loadPromoFilmAction(data));
+});
+
+export const fetchSimilarFilmsAction = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(Action.LOAD_SIMILAR_FILMS, async (filmId, { dispatch, extra: api }) => {
+  const { data } = await api.get<Films>(
+    APIRoute.SimilarFilms.replace('{filmId}', filmId)
+  );
+  dispatch(loadSimilarFilmsAction(data));
 });
 
 // export const checkAuthAction = createAsyncThunk<

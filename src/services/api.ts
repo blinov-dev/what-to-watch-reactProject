@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 
 const BACKEND_URL = 'https://10.react.htmlacademy.pro/wtw';
-const REQUEST_TIMEOUT = 5000;
+const REQUEST_TIMEOUT = 50000;
 
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({

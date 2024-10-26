@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Title from '../title/title';
-
 import Player from '../player/player';
-
 import { Film } from '../../types/film';
+import { useAppDispatch } from '../../hooks';
+import { setCurrentFilmAction } from '../../store/action';
 type SmallFilmCardProps = {
   film: Film;
 }
@@ -12,6 +13,11 @@ type SmallFilmCardProps = {
 function SmallFilmCard({ film }: SmallFilmCardProps): JSX.Element {
   const [isHovered, setIsHovered] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const dispatch = useAppDispatch();
+
+  const handleClickToCurrentFilm = () => {
+    dispatch(setCurrentFilmAction(film));
+  };
 
   const handleMouseEnter = () => {
     // Устанавливаем таймер при наведении мыши
@@ -46,7 +52,7 @@ function SmallFilmCard({ film }: SmallFilmCardProps): JSX.Element {
             <img src={film.previewImage} alt={film.name} width="280" height="175" />
           </div>
           <Title tag="h3" className='small-film-card__title'>
-            <Link className="small-film-card__link" to={`/films/${film.id}`}>{film.name}</Link>
+            <Link className="small-film-card__link" to={`/films/${film.id}`} onClick={handleClickToCurrentFilm}>{film.name}</Link>
           </Title>
         </>
       )}
