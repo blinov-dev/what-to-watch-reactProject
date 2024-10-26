@@ -1,20 +1,28 @@
 import Title from '../title/title';
 import Header from '../header/header';
+import Loading from '../loading/loading';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 
-import { Film } from '../../types/film';
-type FilmCardProps = {
-  promoFilm: Film;
-}
 
-function PromoFilmCard({ promoFilm }: FilmCardProps): JSX.Element {
-  const { name, posterImage, backgroundImage, genre, released } = promoFilm;
+function PromoFilmCard(): JSX.Element {
+
+  const promoFilm = useAppSelector((state) => state.promoFilm);
+
   const navigate = useNavigate();
 
   function handlePlayerButtonClick() {
-    navigate(`/player/${promoFilm.id}`);
+    if (promoFilm) {
+      navigate(`/player/${promoFilm.id}`);
+    }
+    return <Loading />;
   }
 
+  if (!promoFilm) {
+    return <Loading />;
+  }
+
+  const { name, backgroundImage, posterImage, genre, released } = promoFilm;
 
   return (
     <section className="film-card">

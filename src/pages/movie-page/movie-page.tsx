@@ -20,15 +20,6 @@ function MoviePage({ reviews }: MoviePageProps) {
 
   const currentFilm = id ? films.find((film) => film.id === Number(id)) : null;
 
-
-  // let selectedCategory: string | undefined;
-  // if (currentFilm) {
-  //   selectedCategory = currentFilm.genre;
-  // } else {
-  //   selectedCategory = undefined;
-  // }
-  // const filteredFilmsByGenre = selectedCategory ? films.filter((film) => film.genre === selectedCategory) : [];
-
   return (
     <>
       <MoviePlayer />

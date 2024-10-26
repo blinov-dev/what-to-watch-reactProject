@@ -1,4 +1,4 @@
-import { loadStartPageAction, changeGenreAction } from '../../store/action';
+import { changeGenreAction, loadAllGenresFilmsAction } from '../../store/action';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 
 
@@ -10,7 +10,7 @@ function GenreList() {
 
   const handleGenreReset = (event: React.MouseEvent<HTMLAnchorElement>, genre: string) => {
     event.preventDefault();
-    dispatch(loadStartPageAction());
+    dispatch(loadAllGenresFilmsAction());
   };
   const handleGenreChange = (event: React.MouseEvent<HTMLAnchorElement>, genre: string) => {
     event.preventDefault();

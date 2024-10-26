@@ -27,7 +27,7 @@ function App({ films, promoFilm, reviews }: AppProps): JSX.Element {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<MainPage promoFilm={promoFilm} />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<SignInPage />} />
         <Route
           path={AppRoute.MyList}

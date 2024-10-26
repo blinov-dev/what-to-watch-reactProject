@@ -3,12 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 
 import { APIRoute } from '../const/const';
-import { Films } from '../types/film';
-import { loadFilmsAction } from './action';
-
-export const Action = {
-  LOAD_FILMS: 'LOAD FILMS',
-};
+import { Film, Films } from '../types/film';
+import { loadFilmsAction, loadPromoFilmAction, Action } from './action';
 
 export const fetchFilmsAction = createAsyncThunk<
   void,
@@ -18,9 +14,22 @@ export const fetchFilmsAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('LOAD_FILMS', async (_arg, { dispatch, extra: api }) => {
+>(Action.LOAD_FILMS, async (_arg, { dispatch, extra: api }) => {
   const { data } = await api.get<Films>(APIRoute.Films);
   dispatch(loadFilmsAction(data));
+});
+
+export const fetchPromoFilmAction = createAsyncThunk<
+  void,
+  undefined,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(Action.LOAD_PROMO_FILM, async (_arg, { dispatch, extra: api }) => {
+  const { data } = await api.get<Film>(APIRoute.PromoFilm);
+  dispatch(loadPromoFilmAction(data));
 });
 
 // export const checkAuthAction = createAsyncThunk<
