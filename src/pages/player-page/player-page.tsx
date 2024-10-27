@@ -1,20 +1,16 @@
+import { useParams } from 'react-router-dom';
 import MoviePlayer from '../../components/movie-player/movie-player';
 import Player from '../../components/player/player';
+import { useAppSelector } from '../../hooks';
 
-import { useParams } from 'react-router-dom';
+function PlayerPage(): JSX.Element {
 
-import { Film } from '../../types/film';
-type PlayerPageProps = {
-  films: Array<Film>;
-  promoFilm: Film;
-}
-
-
-function PlayerPage({ films, promoFilm }: PlayerPageProps): JSX.Element {
+  const currentFilm = useAppSelector((state) => state.currentFilm);
+  const promoFilm = useAppSelector((state) => state.promoFilm);
 
   const { id } = useParams();
 
-  if (Number(id) === promoFilm.id) {
+  if (promoFilm && Number(id) === promoFilm.id) {
     return (
       <>
         <MoviePlayer />
@@ -24,7 +20,6 @@ function PlayerPage({ films, promoFilm }: PlayerPageProps): JSX.Element {
       </>
     );
   } else {
-    const currentFilm = films.find((film) => film.id === Number(id));
     return (
       <>
         <MoviePlayer />

@@ -54,11 +54,11 @@ function App({ films, promoFilm, }: AppProps): JSX.Element {
             <PrivateRoute
               authorizationStatus={authorizationStatus}
             >
-              <AddReviewPage films={films} />
+              <AddReviewPage />
             </PrivateRoute>
           }
         />
-        <Route path="/player/:id" element={<PlayerPage films={films} promoFilm={promoFilm} />} />
+        <Route path="/player/:id" element={<PlayerPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
@@ -66,3 +66,4 @@ function App({ films, promoFilm, }: AppProps): JSX.Element {
 }
 
 export default App;
+

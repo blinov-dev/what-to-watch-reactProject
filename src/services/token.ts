@@ -1,4 +1,4 @@
-const AUTH_TOKEN_KEY_NAME = 'wtw-user-token';
+export const AUTH_TOKEN_KEY_NAME = 'wtw-user-token';
 export type Token = string;
 
 export const getToken = (): Token => {

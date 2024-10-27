@@ -152,7 +152,5 @@ export const fetchUserInfoAction = createAsyncThunk<
   }
 >(Action.LOAD_USER_INFO, async (_arg, { dispatch, extra: api }) => {
   const response = await api.get<User>(AppRoute.Login);
-  console.log(response);
-
   dispatch(loadUserInfoAction(response.data));
 });

@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import Logo from '../logo/logo';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { logoutAction } from '../../store/api-actions';
+import { fetchUserInfoAction, logoutAction } from '../../store/api-actions';
 import { requireAuthorizationStatusAction } from '../../store/action';
 import { AuthorizationStatus } from '../../const/const';
+import { AUTH_TOKEN_KEY_NAME } from '../../services/token';
+import { useEffect } from 'react';
 
 function Header() {
   const navigate = useNavigate();
@@ -13,12 +15,17 @@ function Header() {
   const userInfo = useAppSelector((state) => state.userInfo);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserInfoAction());
+  }, [dispatch]);
+
   const handleLogOut = () => {
     dispatch(logoutAction());
+    localStorage.removeItem(AUTH_TOKEN_KEY_NAME);
     dispatch(requireAuthorizationStatusAction(AuthorizationStatus.NoAuth));
     navigate('/');
   };
-
 
   if (authorizationStatus === 'AUTH' && userInfo) {
     const { avatarUrl, name } = userInfo;

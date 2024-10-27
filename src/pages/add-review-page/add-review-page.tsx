@@ -1,18 +1,11 @@
 import MoviePlayer from '../../components/movie-player/movie-player';
 import ReviewFilmCard from '../../components/review-film-card/review-film-card';
-import { useParams } from 'react-router-dom';
-
-import { Film } from '../../types/film';
-type AddReviewPageProps = {
-  films: Array<Film>;
-}
+import { useAppSelector } from '../../hooks';
 
 
-function AddReviewPage({ films }: AddReviewPageProps): JSX.Element {
+function AddReviewPage(): JSX.Element {
 
-  const { id } = useParams();
-
-  const currentFilm = id ? films.find((film) => film.id === Number(id)) : null;
+  const currentFilm = useAppSelector((state) => state.currentFilm);
 
   return (
     <>
