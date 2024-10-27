@@ -1,4 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { Films, Film } from '../types/film';
 import { Review } from '../types/review';
 import {
@@ -14,9 +14,11 @@ import {
   resetStateAction,
   resetLoadFilmReviewsAction,
   setErrorAction,
+  loadUserInfoAction,
 } from './action';
 
 import { AuthorizationStatus } from '../const/const';
+import { UserInfo } from '../types/user-info';
 
 type InitialState = {
   films: Films;
@@ -29,6 +31,7 @@ type InitialState = {
   similarFilms: Films;
   filmReviews: Review[];
   error: string | null;
+  userInfo: UserInfo | null;
 };
 
 export const initialState: InitialState = {
@@ -42,6 +45,7 @@ export const initialState: InitialState = {
   similarFilms: [],
   filmReviews: [],
   error: null,
+  userInfo: null,
 };
 
 export const updateStore = createReducer(initialState, (builder) => {
@@ -83,6 +87,12 @@ export const updateStore = createReducer(initialState, (builder) => {
   builder.addCase(resetLoadFilmReviewsAction, (state, action) => {
     state.filmReviews = action.payload;
   });
+  builder.addCase(
+    loadUserInfoAction,
+    (state, action: PayloadAction<UserInfo>) => {
+      state.userInfo = action.payload; // Сохраняем полученные данные о пользователе в store
+    }
+  );
   builder.addCase(
     resetStateAction,
     () => initialState // Сброс состояния на начальное

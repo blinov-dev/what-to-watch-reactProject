@@ -18,8 +18,9 @@ import {
   requireAuthorizationStatusAction,
   setErrorAction,
   redirectToRoute,
+  loadUserInfoAction,
 } from './action';
-import { Review } from '../types/review';
+import { Review, User } from '../types/review';
 import { AuthData } from '../types/auth-data';
 import { dropToken, saveToken } from '../services/token';
 import { UserData } from '../types/user-data';
@@ -74,9 +75,9 @@ export const fetchFilmReviewsAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->(Action.LOAD_SIMILAR_FILMS, async (filmId, { dispatch, extra: api }) => {
+>(Action.LOAD_FILM_REVIEWS, async (filmId, { dispatch, extra: api }) => {
   const { data } = await api.get<Review[]>(
-    APIRoute.SimilarFilms.replace('{filmId}', filmId)
+    APIRoute.Reviews.replace('{filmId}', filmId)
   );
   dispatch(resetLoadFilmReviewsAction(data));
 });
@@ -97,6 +98,7 @@ export const checkAuthAction = createAsyncThunk<
       dispatch(requireAuthorizationStatusAction(AuthorizationStatus.Auth));
     } catch {
       dispatch(requireAuthorizationStatusAction(AuthorizationStatus.NoAuth));
+      dispatch(setErrorAction('Вы не авторизированны!'));
     }
   }
 );
@@ -116,6 +118,7 @@ export const loginAction = createAsyncThunk<
       data: { token },
     } = await api.post<UserData>(APIRoute.Login, { email, password });
     saveToken(token);
+    dispatch(requireAuthorizationStatusAction(AuthorizationStatus.Auth));
     dispatch(redirectToRoute(AppRoute.Main));
   }
 );
@@ -128,11 +131,26 @@ export const logoutAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('user/logout', async (_arg, { extra: api }) => {
+>('user/logout', async (_arg, { dispatch, extra: api }) => {
   await api.delete(APIRoute.Logout);
   dropToken();
+  dispatch(requireAuthorizationStatusAction(AuthorizationStatus.NoAuth));
 });
 
 export const clearErrorAction = createAsyncThunk(Action.SET_ERROR, () => {
   setTimeout(() => store.dispatch(setErrorAction(null)), TIMEOUT_SHOW_ERROR);
+});
+
+export const fetchUserInfoAction = createAsyncThunk<
+  void,
+  undefined,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(Action.LOAD_USER_INFO, async (_arg, { dispatch, extra: api }) => {
+  const response = await api.get<User>(AppRoute.Login);
+
+  dispatch(loadUserInfoAction(response.data));
 });

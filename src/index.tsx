@@ -13,7 +13,6 @@ store.dispatch(fetchFilmsAction());
 store.dispatch(fetchPromoFilmAction());
 store.dispatch(checkAuthAction());
 
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );

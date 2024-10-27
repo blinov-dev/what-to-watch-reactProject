@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Link, useNavigate } from 'react-router-dom';
 
 import Logo from '../logo/logo';
@@ -9,6 +10,7 @@ import { AuthorizationStatus } from '../../const/const';
 function Header() {
   const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+
   const dispatch = useAppDispatch();
   const handleLogOut = () => {
     dispatch(logoutAction());

@@ -16,15 +16,13 @@ type DetailMessageType = {
   message: string;
 };
 const StatusCodeMapping: Record<number, boolean> = {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   [StatusCodes.BAD_REQUEST]: true,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   [StatusCodes.UNAUTHORIZED]: true,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   [StatusCodes.NOT_FOUND]: true,
 };
 const shouldDisplayError = (response: AxiosResponse) =>
   !!StatusCodeMapping[response.status];
+
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
     baseURL: BACKEND_URL,

@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Film } from '../types/film';
-import { Review } from '../types/review';
+import { Review, User } from '../types/review';
 import { AppRoute, AuthorizationStatus } from '../const/const';
 
 export const Action = {
@@ -18,6 +18,7 @@ export const Action = {
   LOGIN_AUTHORIZATION_STATUS: 'LOGIN_AUTHORIZATION_STATUS',
   SET_ERROR: 'SET_ERROR',
   REDIRECT_TO_ROUTE: 'REDIRECT_TO_ROUTE',
+  LOAD_USER_INFO: 'LOAD_USER_INFO',
 };
 
 export const loadFilmsAction = createAction<Film[]>(Action.LOAD_FILMS);
@@ -44,3 +45,5 @@ export const resetStateAction = createAction(Action.RESET_STATE);
 export const resetLoadFilmReviewsAction = createAction<Review[]>(
   Action.LOAD_FILM_REVIEWS
 );
+
+export const loadUserInfoAction = createAction<User>(Action.LOAD_USER_INFO);

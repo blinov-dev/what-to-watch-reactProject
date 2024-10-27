@@ -20,4 +20,4 @@ export enum APIRoute {
   Reviews = '/comments/{filmId}',
 }
 
-export const TIMEOUT_SHOW_ERROR = 2000;
+export const TIMEOUT_SHOW_ERROR = 5000;
