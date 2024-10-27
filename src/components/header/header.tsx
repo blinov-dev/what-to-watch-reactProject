@@ -10,6 +10,7 @@ import { AuthorizationStatus } from '../../const/const';
 function Header() {
   const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const userInfo = useAppSelector((state) => state.userInfo);
 
   const dispatch = useAppDispatch();
   const handleLogOut = () => {
@@ -18,7 +19,9 @@ function Header() {
     navigate('/');
   };
 
-  if (authorizationStatus === 'AUTH') {
+
+  if (authorizationStatus === 'AUTH' && userInfo) {
+    const { avatarUrl, name } = userInfo;
     return (
       <header className="page-header film-card__head">
         <Logo light={false} />
@@ -26,7 +29,7 @@ function Header() {
           <li className="user-block__item">
             <div className="user-block__avatar">
               <img
-                src="img/avatar.jpg"
+                src={avatarUrl ? avatarUrl : 'img/avatar.jpg'}
                 alt="User avatar"
                 width="63"
                 height="63"
@@ -34,7 +37,7 @@ function Header() {
             </div>
           </li>
           <li className="user-block__item">
-            <Link className="user-block__link" to="/" onClick={handleLogOut}>Sign out</Link>
+            <Link className="user-block__link" to="/" onClick={handleLogOut}>{name ? name : 'Sign out'}</Link>
           </li>
         </ul>
       </header>

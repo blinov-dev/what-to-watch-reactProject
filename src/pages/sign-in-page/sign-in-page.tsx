@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import { useRef, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import MoviePlayer from '../../components/movie-player/movie-player';
 import Title from '../../components/title/title';
 import { useAppDispatch } from '../../hooks';
-import { loginAction } from '../../store/api-actions';
+import { fetchUserInfoAction, loginAction } from '../../store/api-actions';
 import { AppRoute, AuthorizationStatus } from '../../const/const';
 import { requireAuthorizationStatusAction } from '../../store/action';
 
@@ -19,12 +20,19 @@ function SignInPage(): JSX.Element {
       dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value
-      }));
-      navigate(AppRoute.Main);
-      dispatch(requireAuthorizationStatusAction(AuthorizationStatus.Auth));
+      })).unwrap() // Используем unwrap() для получения результата
+        .then(() => {
+          // После успешного входа
+          dispatch(fetchUserInfoAction()); // Получаем информацию о пользователе
+          dispatch(requireAuthorizationStatusAction(AuthorizationStatus.Auth)); // Устанавливаем статус авторизации
+          navigate(AppRoute.Main); // Навигация после успешного входа
+        })
+        .catch((error) => {
+          console.error('Login failed:', error); // Обработка ошибок
+          // Вы можете также установить состояние ошибки и показать сообщение пользователю
+        });
     }
   };
-
 
   return (
     <>
