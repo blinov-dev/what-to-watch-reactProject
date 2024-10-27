@@ -19,6 +19,8 @@ export const Action = {
   SET_ERROR: 'SET_ERROR',
   REDIRECT_TO_ROUTE: 'REDIRECT_TO_ROUTE',
   LOAD_USER_INFO: 'LOAD_USER_INFO',
+  LOAD_FAVORITE_FILMS: 'LOAD_FAVORITE_FILMS',
+  ADD_FILM_IN_FAVORITE: 'ADD_FILM_IN_FAVORITE',
 };
 
 export const loadFilmsAction = createAction<Film[]>(Action.LOAD_FILMS);
@@ -44,6 +46,13 @@ export const redirectToRoute = createAction<AppRoute>(Action.REDIRECT_TO_ROUTE);
 export const resetStateAction = createAction(Action.RESET_STATE);
 export const resetLoadFilmReviewsAction = createAction<Review[]>(
   Action.LOAD_FILM_REVIEWS
+);
+
+export const loadFavoriteFilmsAction = createAction<Film[]>(
+  Action.LOAD_FAVORITE_FILMS
+);
+export const addFilmInFavoriteAction = createAction<Film>(
+  Action.ADD_FILM_IN_FAVORITE
 );
 
 export const loadUserInfoAction = createAction<User>(Action.LOAD_USER_INFO);

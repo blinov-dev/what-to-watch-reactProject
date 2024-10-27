@@ -15,6 +15,7 @@ import {
   resetLoadFilmReviewsAction,
   setErrorAction,
   loadUserInfoAction,
+  loadFavoriteFilmsAction,
 } from './action';
 
 import { AuthorizationStatus } from '../const/const';
@@ -32,6 +33,7 @@ type InitialState = {
   filmReviews: Review[];
   error: string | null;
   userInfo: UserInfo | null;
+  favoriteFilms: Film[];
 };
 
 export const initialState: InitialState = {
@@ -46,6 +48,7 @@ export const initialState: InitialState = {
   filmReviews: [],
   error: null,
   userInfo: null,
+  favoriteFilms: [],
 };
 
 export const updateStore = createReducer(initialState, (builder) => {
@@ -86,6 +89,9 @@ export const updateStore = createReducer(initialState, (builder) => {
   });
   builder.addCase(resetLoadFilmReviewsAction, (state, action) => {
     state.filmReviews = action.payload;
+  });
+  builder.addCase(loadFavoriteFilmsAction, (state, action) => {
+    state.favoriteFilms = action.payload; // Обновляем состояние с новыми любимыми фильмами
   });
   builder.addCase(
     loadUserInfoAction,

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Link, useNavigate } from 'react-router-dom';
 
 import Logo from '../logo/logo';
@@ -8,8 +7,14 @@ import { requireAuthorizationStatusAction } from '../../store/action';
 import { AuthorizationStatus } from '../../const/const';
 import { AUTH_TOKEN_KEY_NAME } from '../../services/token';
 import { useEffect } from 'react';
+import Title from '../title/title';
 
-function Header() {
+type HeaderProps = {
+  headerType: string;
+}
+
+function Header({ headerType }: HeaderProps): JSX.Element {
+
   const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const userInfo = useAppSelector((state) => state.userInfo);
@@ -30,8 +35,9 @@ function Header() {
   if (authorizationStatus === 'AUTH' && userInfo) {
     const { avatarUrl, name } = userInfo;
     return (
-      <header className="page-header film-card__head">
+      <header className={headerType === 'my-list' ? 'page-header user-page__head' : 'page-header film-card__head'} >
         <Logo light={false} />
+        {headerType === 'my-list' ? <Title className="page-title user-page__title">My list</Title> : null}
         <ul className="user-block">
           <li className="user-block__item">
             <div className="user-block__avatar">
@@ -47,7 +53,7 @@ function Header() {
             <Link className="user-block__link" to="/" onClick={handleLogOut}>{name ? name : 'Sign out'}</Link>
           </li>
         </ul>
-      </header>
+      </header >
     );
   }
 

@@ -12,16 +12,11 @@ import MyListPage from '../../pages/my-list-page/my-list-page';
 import PlayerPage from '../../pages/player-page/player-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 
-import { Film } from '../../types/film';
+
 import Loading from '../loading/loading';
 import { useAppSelector } from '../../hooks';
-type AppProps = {
-  films: Array<Film>;
-  promoFilm: Film;
-}
 
-
-function App({ films, promoFilm, }: AppProps): JSX.Element {
+function App(): JSX.Element {
 
   const films1 = useAppSelector((state) => state.films);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -43,7 +38,7 @@ function App({ films, promoFilm, }: AppProps): JSX.Element {
             <PrivateRoute
               authorizationStatus={authorizationStatus}
             >
-              <MyListPage films={films} />
+              <MyListPage />
             </PrivateRoute>
           }
         />

@@ -20,12 +20,14 @@ import {
   setErrorAction,
   redirectToRoute,
   loadUserInfoAction,
+  loadFavoriteFilmsAction,
 } from './action';
 import { Review, User } from '../types/review';
 import { AuthData } from '../types/auth-data';
 import { dropToken, saveToken } from '../services/token';
 import { UserData } from '../types/user-data';
 import { store } from '.';
+import { AddFavorite } from '../types/add-favorite';
 
 export const fetchFilmsAction = createAsyncThunk<
   void,
@@ -154,3 +156,77 @@ export const fetchUserInfoAction = createAsyncThunk<
   const response = await api.get<User>(AppRoute.Login);
   dispatch(loadUserInfoAction(response.data));
 });
+
+// export const fetchAddFilmInFavoriteAction = createAsyncThunk<
+//   void,
+//   AddFavorite, // Используем новый интерфейс
+//   {
+//     dispatch: AppDispatch;
+//     state: State;
+//     extra: AxiosInstance;
+//   }
+// >(
+//   Action.ADD_FILM_IN_FAVORITE,
+//   async ({ filmId, status }, { dispatch, extra: api }) => {
+//     const { data } = await api.post<Film>(
+//       APIRoute.AddFavorite.replace('{filmId}', filmId).replace(
+//         '{status}',
+//         status.toString()
+//       )
+//     );
+//     dispatch(addFilmInFavoriteAction(data));
+//   }
+// );
+
+// export const fetchFavoriteFilmsAction = createAsyncThunk<
+//   void,
+//   undefined,
+//   {
+//     dispatch: AppDispatch;
+//     state: State;
+//     extra: AxiosInstance;
+//   }
+// >(Action.LOAD_FAVORITE_FILMS, async (_arg, { dispatch, extra: api }) => {
+//   const { data } = await api.get<Film[]>(APIRoute.Favorite);
+//   dispatch(loadFavoriteFilmsAction(data));
+//   console.log(data);
+// });
+export const fetchAddFilmInFavoriteAction = createAsyncThunk<
+  void,
+  AddFavorite, // Используем новый интерфейс
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(
+  Action.ADD_FILM_IN_FAVORITE,
+  async ({ filmId, status }, { dispatch, extra: api }) => {
+    await api.post<Film>(
+      APIRoute.AddFavorite.replace('{filmId}', filmId).replace(
+        '{status}',
+        status.toString()
+      )
+    );
+
+    // Получаем обновленный список любимых фильмов
+    const { data: favoriteFilms } = await api.get<Film[]>(APIRoute.Favorite);
+    dispatch(loadFavoriteFilmsAction(favoriteFilms)); // Обновляем состояние с новыми любимыми фильмами
+  }
+);
+
+export const fetchFavoriteFilmsAction = createAsyncThunk<
+  Film[], // Тип возвращаемого значения
+  void, // Тип аргументов (в данном случае нет аргументов)
+  {
+    extra: AxiosInstance; // Тип для AxiosInstance
+  }
+>(
+  'favoriteFilms/fetch', // Тип действия
+  async (_, { extra: api }) => {
+    const response = await api.get<Film[]>(APIRoute.Favorite); // Выполняем запрос к API
+    console.log(response.data);
+
+    return response.data; // Возвращаем данные
+  }
+);

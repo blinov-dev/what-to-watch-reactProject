@@ -1,43 +1,34 @@
+/* eslint-disable no-console */
 import MoviePlayer from '../../components/movie-player/movie-player';
-import { Link } from 'react-router-dom';
-import Logo from '../../components/logo/logo';
 import Title from '../../components/title/title';
 import SmallFilmCard from '../../components/small-film-card/small-film-card';
 import Footer from '../../components/footer/footer';
+import Header from '../../components/header/header';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { fetchFavoriteFilmsAction } from '../../store/api-actions';
 
-import { Film } from '../../types/film';
-type MyListProps = {
-  films: Array<Film>;
-}
+function MyListPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const favoriteFilms = useAppSelector((state) => state.favoriteFilms);
 
-function MyListPage({ films }: MyListProps): JSX.Element {
+  useEffect(() => {
+
+    dispatch(fetchFavoriteFilmsAction());
+  }, [dispatch]);
+
+
   return (
     <>
       <MoviePlayer />
       <div className="user-page">
-        <header className="page-header user-page__head">
-          <Logo light={false} />
-
-          <Title className="page-title user-page__title">My list</Title>
-
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <Link to="/login" className="user-block__link">Sign out</Link>
-            </li>
-          </ul>
-        </header>
-
+        <Header headerType={'my-list'} />
         <section className="catalog">
           <Title tag="h2" className="catalog__title visually-hidden">Catalog</Title>
 
           <div className="catalog__films-list">
-            {films &&
-              films.map((film) => {
+            {favoriteFilms &&
+              favoriteFilms.map((film) => {
                 if (film.isFavorite === true) {
                   return <SmallFilmCard key={film.id} film={film} />;
                 }
@@ -53,3 +44,4 @@ function MyListPage({ films }: MyListProps): JSX.Element {
 }
 
 export default MyListPage;
+

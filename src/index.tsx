@@ -6,8 +6,6 @@ import ErrorMessage from './components/error-message/error-message';
 import { fetchFilmsAction, fetchPromoFilmAction, checkAuthAction } from './store/api-actions';
 
 import App from './components/app/app';
-import { FILMS } from './mocks/films';
-import { PROMO_FILM } from './mocks/promo-film';
 
 store.dispatch(fetchFilmsAction());
 store.dispatch(fetchPromoFilmAction());
@@ -21,7 +19,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ErrorMessage />
-      <App films={FILMS} promoFilm={PROMO_FILM} />
+      <App />
     </Provider>
   </React.StrictMode>
 );

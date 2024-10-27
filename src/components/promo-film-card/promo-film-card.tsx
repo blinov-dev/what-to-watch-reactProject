@@ -1,13 +1,31 @@
+/* eslint-disable no-console */
 import Title from '../title/title';
 import Header from '../header/header';
 import Loading from '../loading/loading';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
+import ButtonMyList from '../button-my-list/button-my-list';
+import { useDispatch } from 'react-redux';
+import { fetchAddFilmInFavoriteAction } from '../../store/api-actions';
 
 
 function PromoFilmCard(): JSX.Element {
 
   const promoFilm = useAppSelector((state) => state.promoFilm);
+
+  // const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const dispatch = useDispatch();
+
+  const handleAddToMyList = () => {
+    if (promoFilm) {
+      const filmId = promoFilm.id.toString();
+      const status = promoFilm.isFavorite === false ? 1 : 0;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dispatch(fetchAddFilmInFavoriteAction({ filmId, status }) as any);
+      navigate('/my-list');
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -17,6 +35,14 @@ function PromoFilmCard(): JSX.Element {
     }
     return <Loading />;
   }
+
+  // function handleMyListButtonClick() {
+  //   if (authorizationStatus === 'AUTH') {
+  //     navigate('/my-list');
+  //   } else {
+  //     navigate('/login');
+  //   }
+  // }
 
   if (!promoFilm) {
     return <Loading />;
@@ -32,7 +58,7 @@ function PromoFilmCard(): JSX.Element {
 
       <Title className='visually-hidden'>WTW</Title>
 
-      <Header />
+      <Header headerType={''} />
 
       <div className="film-card__wrap">
         <div className="film-card__info">
@@ -55,17 +81,12 @@ function PromoFilmCard(): JSX.Element {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list film-card__button" type="button">
-                <svg viewBox="0 0 19 20" width="19" height="20">
-                  <use xlinkHref="#add"></use>
-                </svg>
-                <span>My list</span>
-              </button>
+              <ButtonMyList onClick={handleAddToMyList} />
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }
 export default PromoFilmCard;

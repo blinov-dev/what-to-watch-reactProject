@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 
 import Title from '../../components/title/title';
 import Header from '../header/header';
@@ -5,9 +6,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import FullFilmCardTabs from '../full-film-card-tabs/full-film-card-tabs';
 import { useAppSelector } from '../../hooks';
 import Loading from '../loading/loading';
+import ButtonMyList from '../button-my-list/button-my-list';
+import { fetchAddFilmInFavoriteAction } from '../../store/api-actions';
+import { useDispatch } from 'react-redux';
 
 function FullFilmCard(): JSX.Element {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const currentFilm = useAppSelector((state) => state.currentFilm);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -25,6 +30,15 @@ function FullFilmCard(): JSX.Element {
       navigate('*');
     }
   }
+  const handleAddToMyList = () => {
+    if (currentFilm) {
+      const filmId = currentFilm.id.toString();
+      const status = currentFilm.isFavorite === false ? 1 : 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dispatch(fetchAddFilmInFavoriteAction({ filmId, status }) as any);
+      navigate('/my-list');
+    }
+  };
 
   return (
     <section className="film-card film-card--full">
@@ -35,7 +49,7 @@ function FullFilmCard(): JSX.Element {
 
         <Title className="visually-hidden">WTW</Title>
 
-        <Header />
+        <Header headerType={''} />
 
         <div className="film-card__wrap">
           <div className="film-card__desc">
@@ -52,12 +66,7 @@ function FullFilmCard(): JSX.Element {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list film-card__button" type="button">
-                <svg viewBox="0 0 19 20" width="19" height="20">
-                  <use xlinkHref="#add"></use>
-                </svg>
-                <span>My list</span>
-              </button>
+              <ButtonMyList onClick={handleAddToMyList} />
               <Link to="review" className={authorizationStatus === 'AUTH' ? 'btn film-card__button' : 'visually-hidden'}>Add review</Link>
             </div>
           </div>
@@ -78,3 +87,4 @@ function FullFilmCard(): JSX.Element {
 }
 
 export default FullFilmCard;
+
