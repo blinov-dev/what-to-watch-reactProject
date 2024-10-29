@@ -20,6 +20,6 @@ export enum APIRoute {
   Favorite = '/favorite',
   AddFavorite = '/favorite/{filmId}/{status}',
   Reviews = '/comments/{filmId}',
+  Film = '/films/{filmId}',
+  Comments = '/comments/{filmId}',
 }
-
-export const TIMEOUT_SHOW_ERROR = 5000;

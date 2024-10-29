@@ -22,8 +22,11 @@ function Header({ headerType }: HeaderProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserInfoAction());
-  }, [dispatch]);
+    // Проверяем статус авторизации перед выполнением запроса
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchUserInfoAction);
+    }
+  }, [dispatch, authorizationStatus]);
 
   const handleLogOut = () => {
     dispatch(logoutAction());

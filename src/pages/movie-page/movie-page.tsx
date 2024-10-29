@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 
 
 import { useEffect } from 'react';
-import { changeGenreAction, setCurrentFilmAction } from '../../store/action';
+import { changeGenreAction, loadCurrentFilmAction } from '../../store/action';
 import { fetchSimilarFilmsAction } from '../../store/api-actions';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ function MoviePage() {
     if (id && films.length > 0) {
       const filmToSet = films.find((film) => film.id === Number(id));
       if (filmToSet) {
-        dispatch(setCurrentFilmAction(filmToSet));
+        dispatch(loadCurrentFilmAction(filmToSet));
       } else {
         navigate('*');
       }

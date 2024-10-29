@@ -6,14 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import ButtonMyList from '../button-my-list/button-my-list';
 import { useDispatch } from 'react-redux';
-import { fetchAddFilmInFavoriteAction } from '../../store/api-actions';
+import { fetchAddFilmInFavoriteAction, fetchFavoriteFilmsAction } from '../../store/api-actions';
 
 
 function PromoFilmCard(): JSX.Element {
 
   const promoFilm = useAppSelector((state) => state.promoFilm);
-
-  // const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const dispatch = useDispatch();
 
   const handleAddToMyList = () => {
@@ -23,6 +21,7 @@ function PromoFilmCard(): JSX.Element {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dispatch(fetchAddFilmInFavoriteAction({ filmId, status }) as any);
+      fetchFavoriteFilmsAction();
       navigate('/my-list');
     }
   };

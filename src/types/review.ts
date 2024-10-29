@@ -13,3 +13,8 @@ export type User = {
   name: string;
   token: string;
 };
+
+export type CommentInfo = {
+  comment: string;
+  rating: number;
+};

@@ -1,9 +1,33 @@
 import { useState } from 'react';
-
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchAddCommentAction } from '../../store/api-actions';
+import { CommentInfo } from '../../types/review';
+import { useNavigate } from 'react-router-dom';
 
 function FormAddReview(): JSX.Element {
   const [rating, setRating] = useState('0');
-  const [comment, setComment] = useState('');
+  const [commentText, setComment] = useState('');
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const currentFilm = useAppSelector((state) => state.currentFilm);
+  const filmId: string | null = currentFilm ? String(currentFilm.id) : null;
+
+  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    const commentData: CommentInfo = { comment: commentText, rating: parseInt(rating, 10) };
+
+    if (filmId) {
+      // eslint-disable-next-line
+      dispatch(fetchAddCommentAction({ filmId, comment: commentData }))
+        .then(() => {
+          // После успешной отправки комментария перенаправляем пользователя
+          navigate(`/films/${filmId}`);
+        });
+    }
+    setComment('');
+    setRating('0');
+  };
 
 
   const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +40,7 @@ function FormAddReview(): JSX.Element {
 
   return (
     <div className="add-review">
-      <form action="#" className="add-review__htmlForm">
+      <form action="#" className="add-review__htmlForm" onSubmit={handleSubmit}>
         <div className="rating">
           <div className="rating__stars">
             <h2 className="visually-hidden">Текущий рейтинг {rating}</h2>
@@ -53,7 +77,7 @@ function FormAddReview(): JSX.Element {
         </div>
 
         <div className="add-review__text">
-          <textarea className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text" value={comment} onChange={handleCommentChange} />
+          <textarea className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text" value={commentText} onChange={handleCommentChange} />
           <div className="add-review__submit">
             <button className="add-review__btn" type="submit">Post</button>
           </div>

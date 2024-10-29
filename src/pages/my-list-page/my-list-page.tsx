@@ -6,16 +6,15 @@ import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect } from 'react';
-import { fetchFavoriteFilmsAction } from '../../store/api-actions';
+import { loadFavoriteFilmsAction } from '../../store/action';
 
 function MyListPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const favoriteFilms = useAppSelector((state) => state.favoriteFilms);
 
   useEffect(() => {
-
-    dispatch(fetchFavoriteFilmsAction());
-  }, [dispatch]);
+    dispatch(loadFavoriteFilmsAction(favoriteFilms));
+  }, [dispatch, favoriteFilms]);
 
 
   return (
@@ -28,12 +27,7 @@ function MyListPage(): JSX.Element {
 
           <div className="catalog__films-list">
             {favoriteFilms &&
-              favoriteFilms.map((film) => {
-                if (film.isFavorite === true) {
-                  return <SmallFilmCard key={film.id} film={film} />;
-                }
-                return null;
-              })}
+              favoriteFilms.map((film) => <SmallFilmCard key={film.id} film={film} />)}
           </div>
         </section>
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, } from 'react-router-dom';
+import { Routes, Route, } from 'react-router-dom';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 
 import { AppRoute, AuthorizationStatus } from '../../const/const';
@@ -15,19 +15,22 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 
 import Loading from '../loading/loading';
 import { useAppSelector } from '../../hooks';
+import HistoryRouter from '../history-route/history-route';
+import browserHistory from '../browser-history';
 
 function App(): JSX.Element {
 
   const films1 = useAppSelector((state) => state.films);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  if (authorizationStatus === AuthorizationStatus.Unknown || films1.length === 0) {
+  if (authorizationStatus === AuthorizationStatus.Unknown && films1.length === 0) {
     return (
       <Loading />
     );
   }
 
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainPage />} />
@@ -56,7 +59,7 @@ function App(): JSX.Element {
         <Route path="/player/:id" element={<PlayerPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 

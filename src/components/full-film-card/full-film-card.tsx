@@ -7,7 +7,7 @@ import FullFilmCardTabs from '../full-film-card-tabs/full-film-card-tabs';
 import { useAppSelector } from '../../hooks';
 import Loading from '../loading/loading';
 import ButtonMyList from '../button-my-list/button-my-list';
-import { fetchAddFilmInFavoriteAction } from '../../store/api-actions';
+import { fetchAddFilmInFavoriteAction, } from '../../store/api-actions';
 import { useDispatch } from 'react-redux';
 
 function FullFilmCard(): JSX.Element {
@@ -22,7 +22,6 @@ function FullFilmCard(): JSX.Element {
   }
 
   const { name, backgroundImage, posterImage, genre, released } = currentFilm;
-
   function handlePlayerButtonClick() {
     if (currentFilm) {
       navigate(`/player/${currentFilm.id}`);

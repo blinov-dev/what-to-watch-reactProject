@@ -1,21 +1,30 @@
 import { useState } from 'react';
 import { convertMinutesToTimeString, convertRating, convertLevelRating } from '../../utils/utils';
 import UserReview from '../user-review/user-review';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import Loading from '../loading/loading';
+import { fetchFilmCommentsAction } from '../../store/api-actions';
 
 function FullFilmCardTabs(): JSX.Element {
   const [activeTab, setActiveTab] = useState('overview');
-  const handleTabClick = (tab: string, event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    setActiveTab(tab);
-  };
-
-  const currentFilmReviews = useAppSelector((state) => state.filmReviews);
+  const dispatch = useAppDispatch();
+  const filmsComments = useAppSelector((state) => state.filmsComments);
   const currentFilm = useAppSelector((state) => state.currentFilm);
+
   if (!currentFilm) {
     return <Loading />;
   }
+
+  const { id } = currentFilm;
+
+  const handleTabClick = (tab: string, event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setActiveTab(tab);
+    if (tab === 'reviews') {
+      dispatch(fetchFilmCommentsAction({ filmId: String(id) })); // Загружаем комментарии
+    }
+  };
+
   const { rating, scoresCount, description, director, starring, runTime } = currentFilm;
 
   return (
@@ -85,10 +94,10 @@ function FullFilmCardTabs(): JSX.Element {
       {activeTab === 'reviews' && (
         <div className="film-card__reviews film-card__row">
           <div className="film-card__reviews-col">
-            {currentFilmReviews.length === 0 ? <div>Обзоров еще нет</div> : currentFilmReviews && currentFilmReviews.slice(0, 3).map((review) => <UserReview key={review.id} review={review} />)}
+            {filmsComments.length === 0 ? <div>Обзоров еще нет</div> : filmsComments && filmsComments.slice(0, 3).map((review) => <UserReview key={review.id} review={review} />)}
           </div>
           <div className="film-card__reviews-col">
-            {currentFilmReviews && currentFilmReviews.slice(3, 6).map((review) => <UserReview key={review.id} review={review} />)}
+            {filmsComments && filmsComments.slice(3, 6).map((review) => <UserReview key={review.id} review={review} />)}
           </div>
         </div>
       )}

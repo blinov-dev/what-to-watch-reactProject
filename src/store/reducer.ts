@@ -9,13 +9,13 @@ import {
   setFilteredFilmsAction,
   requireAuthorizationStatusAction,
   loadPromoFilmAction,
-  setCurrentFilmAction,
   loadSimilarFilmsAction,
   resetStateAction,
   resetLoadFilmReviewsAction,
-  setErrorAction,
   loadUserInfoAction,
   loadFavoriteFilmsAction,
+  loadCurrentFilmAction,
+  loadFilmCommentsAction,
 } from './action';
 
 import { AuthorizationStatus } from '../const/const';
@@ -31,9 +31,9 @@ type InitialState = {
   currentFilm: Film | null;
   similarFilms: Films;
   filmReviews: Review[];
-  error: string | null;
   userInfo: UserInfo | null;
   favoriteFilms: Film[];
+  filmsComments: Review[];
 };
 
 export const initialState: InitialState = {
@@ -46,9 +46,9 @@ export const initialState: InitialState = {
   currentFilm: null,
   similarFilms: [],
   filmReviews: [],
-  error: null,
   userInfo: null,
   favoriteFilms: [],
+  filmsComments: [],
 };
 
 export const updateStore = createReducer(initialState, (builder) => {
@@ -61,7 +61,7 @@ export const updateStore = createReducer(initialState, (builder) => {
   builder.addCase(loadPromoFilmAction, (state, action) => {
     state.promoFilm = action.payload;
   });
-  builder.addCase(setCurrentFilmAction, (state, action) => {
+  builder.addCase(loadCurrentFilmAction, (state, action) => {
     state.currentFilm = action.payload;
   });
   builder.addCase(loadAllGenresFilmsAction, (state) => {
@@ -81,18 +81,19 @@ export const updateStore = createReducer(initialState, (builder) => {
   builder.addCase(requireAuthorizationStatusAction, (state, action) => {
     state.authorizationStatus = action.payload;
   });
-  builder.addCase(setErrorAction, (state, action) => {
-    state.error = action.payload;
-  });
   builder.addCase(loadSimilarFilmsAction, (state, action) => {
     state.similarFilms = action.payload;
   });
   builder.addCase(resetLoadFilmReviewsAction, (state, action) => {
     state.filmReviews = action.payload;
   });
+  builder.addCase(loadFilmCommentsAction, (state, action) => {
+    state.filmsComments = action.payload;
+  });
   builder.addCase(loadFavoriteFilmsAction, (state, action) => {
     state.favoriteFilms = action.payload; // Обновляем состояние с новыми любимыми фильмами
   });
+
   builder.addCase(
     loadUserInfoAction,
     (state, action: PayloadAction<UserInfo>) => {

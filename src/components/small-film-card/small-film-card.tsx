@@ -5,7 +5,7 @@ import Title from '../title/title';
 import Player from '../player/player';
 import { Film } from '../../types/film';
 import { useAppDispatch } from '../../hooks';
-import { setCurrentFilmAction } from '../../store/action';
+import { loadCurrentFilmAction } from '../../store/action';
 type SmallFilmCardProps = {
   film: Film;
 }
@@ -16,7 +16,7 @@ function SmallFilmCard({ film }: SmallFilmCardProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const handleClickToCurrentFilm = () => {
-    dispatch(setCurrentFilmAction(film));
+    dispatch(loadCurrentFilmAction(film));
   };
 
   const handleMouseEnter = () => {

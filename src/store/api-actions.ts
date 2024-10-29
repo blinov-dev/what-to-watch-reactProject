@@ -3,12 +3,7 @@ import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 
-import {
-  APIRoute,
-  AppRoute,
-  AuthorizationStatus,
-  TIMEOUT_SHOW_ERROR,
-} from '../const/const';
+import { APIRoute, AppRoute, AuthorizationStatus } from '../const/const';
 import { Film, Films } from '../types/film';
 import {
   loadFilmsAction,
@@ -17,17 +12,18 @@ import {
   Action,
   resetLoadFilmReviewsAction,
   requireAuthorizationStatusAction,
-  setErrorAction,
   redirectToRoute,
   loadUserInfoAction,
   loadFavoriteFilmsAction,
+  loadCurrentFilmAction,
+  loadFilmCommentsAction,
 } from './action';
 import { Review, User } from '../types/review';
 import { AuthData } from '../types/auth-data';
 import { dropToken, saveToken } from '../services/token';
 import { UserData } from '../types/user-data';
-import { store } from '.';
 import { AddFavorite } from '../types/add-favorite';
+import { CommentInfo } from '../types/review';
 
 export const fetchFilmsAction = createAsyncThunk<
   void,
@@ -101,7 +97,6 @@ export const checkAuthAction = createAsyncThunk<
       dispatch(requireAuthorizationStatusAction(AuthorizationStatus.Auth));
     } catch {
       dispatch(requireAuthorizationStatusAction(AuthorizationStatus.NoAuth));
-      dispatch(setErrorAction('Вы не авторизированны!'));
     }
   }
 );
@@ -140,10 +135,6 @@ export const logoutAction = createAsyncThunk<
   dispatch(requireAuthorizationStatusAction(AuthorizationStatus.NoAuth));
 });
 
-export const clearErrorAction = createAsyncThunk(Action.SET_ERROR, () => {
-  setTimeout(() => store.dispatch(setErrorAction(null)), TIMEOUT_SHOW_ERROR);
-});
-
 export const fetchUserInfoAction = createAsyncThunk<
   void,
   undefined,
@@ -157,40 +148,6 @@ export const fetchUserInfoAction = createAsyncThunk<
   dispatch(loadUserInfoAction(response.data));
 });
 
-// export const fetchAddFilmInFavoriteAction = createAsyncThunk<
-//   void,
-//   AddFavorite, // Используем новый интерфейс
-//   {
-//     dispatch: AppDispatch;
-//     state: State;
-//     extra: AxiosInstance;
-//   }
-// >(
-//   Action.ADD_FILM_IN_FAVORITE,
-//   async ({ filmId, status }, { dispatch, extra: api }) => {
-//     const { data } = await api.post<Film>(
-//       APIRoute.AddFavorite.replace('{filmId}', filmId).replace(
-//         '{status}',
-//         status.toString()
-//       )
-//     );
-//     dispatch(addFilmInFavoriteAction(data));
-//   }
-// );
-
-// export const fetchFavoriteFilmsAction = createAsyncThunk<
-//   void,
-//   undefined,
-//   {
-//     dispatch: AppDispatch;
-//     state: State;
-//     extra: AxiosInstance;
-//   }
-// >(Action.LOAD_FAVORITE_FILMS, async (_arg, { dispatch, extra: api }) => {
-//   const { data } = await api.get<Film[]>(APIRoute.Favorite);
-//   dispatch(loadFavoriteFilmsAction(data));
-//   console.log(data);
-// });
 export const fetchAddFilmInFavoriteAction = createAsyncThunk<
   void,
   AddFavorite, // Используем новый интерфейс
@@ -216,17 +173,66 @@ export const fetchAddFilmInFavoriteAction = createAsyncThunk<
 );
 
 export const fetchFavoriteFilmsAction = createAsyncThunk<
-  Film[], // Тип возвращаемого значения
-  void, // Тип аргументов (в данном случае нет аргументов)
+  void,
+  undefined,
   {
-    extra: AxiosInstance; // Тип для AxiosInstance
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(Action.LOAD_FAVORITE_FILMS, async (_arg, { dispatch, extra: api }) => {
+  const { data } = await api.get<Films>(APIRoute.Favorite);
+  dispatch(loadFavoriteFilmsAction(data));
+});
+
+export const fetchCurrentFilmAction = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(Action.LOAD_CURRENT_FILM, async (filmId, { dispatch, extra: api }) => {
+  const { data } = await api.get<Film>(
+    APIRoute.Film.replace('{filmId}', filmId)
+  );
+  dispatch(loadCurrentFilmAction(data));
+});
+
+export const fetchAddCommentAction = createAsyncThunk<
+  void, // Возвращаемый тип данных (в данном случае ничего не возвращаем)
+  { filmId: string; comment: CommentInfo }, // Тип параметров
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
   }
 >(
-  'favoriteFilms/fetch', // Тип действия
-  async (_, { extra: api }) => {
-    const response = await api.get<Film[]>(APIRoute.Favorite); // Выполняем запрос к API
-    console.log(response.data);
+  Action.ADD_FILM_COMMENT, // Измените на правильное действие
+  async ({ filmId, comment }, { extra: api }) => {
+    await api.post<CommentInfo>(
+      APIRoute.Comments.replace('{filmId}', filmId),
+      comment // Отправляем комментарий на сервер
+    );
+  }
+);
 
-    return response.data; // Возвращаем данные
+export const fetchFilmCommentsAction = createAsyncThunk<
+  Review[], // Возвращаемый тип данных (массив комментариев)
+  { filmId: string }, // Тип параметров
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>(
+  Action.LOAD_FILM_COMMENTS, // Измените на правильное действие
+  async ({ filmId }, { dispatch, extra: api }) => {
+    const { data } = await api.get<Review[]>(
+      APIRoute.Comments.replace('{filmId}', filmId)
+    );
+    dispatch(loadFilmCommentsAction(data));
+    return data; // Возвращаем список комментариев
   }
 );
